@@ -12,6 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +34,7 @@ public class AuthController {
         User user = User.builder().email("altun@gmail.com").build();
         user.setId(1L);
 
+        authenticate(loginPayload);
 
         return BaseResponse.succed(
                 LoginResponse.builder()
@@ -41,6 +45,18 @@ public class AuthController {
                                 .build()))
                         .build()
         );
+    }
+
+
+    private final AuthenticationManager authenticationManager;
+    private void authenticate(LoginPayload request){
+        try{
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword())
+            );
+        }catch (AuthenticationException e){
+            throw new RuntimeException("Exception: " + e);
+        }
     }
 
 }

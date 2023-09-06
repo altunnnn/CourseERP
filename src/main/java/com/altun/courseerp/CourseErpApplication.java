@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 @MapperScan("com.altun.courseerp.repository")
@@ -30,6 +31,7 @@ public class CourseErpApplication implements CommandLineRunner {
     private final SecurityProperties securityProperties;
     private final AccesTokenManager accesTokenManager;
     private final UserServiceImpl service;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -37,11 +39,11 @@ public class CourseErpApplication implements CommandLineRunner {
 //                .name("Test")
 //                .surname("test")
 //                .roleId(2L)
-//                .phoneNumber("123")
+//                .phoneNumber(passwordEncoder.encode("123123"))
 //                .status(UserStatus.ACTIVE)
 //                .password("123123")
 //                .email("altun@email.com").build();
-//  //      user.setId(1L);
+  //      user.setId(1L);
 //        try{
 //            service.insert(user);
 //            System.out.println("ugurla inserted");
