@@ -23,4 +23,8 @@ public class BaseResponse<T> {
                 data(data).
                 build();
     }
+
+    public static <T> BaseResponse<T> succed() {
+        return succed(null);
+    }
 }

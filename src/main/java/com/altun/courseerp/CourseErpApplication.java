@@ -38,25 +38,26 @@ public class CourseErpApplication implements CommandLineRunner {
 //        User user = User.builder()
 //                .name("Test")
 //                .surname("test")
-//                .roleId(2L)
-//                .phoneNumber(passwordEncoder.encode("123123"))
+//                .roleId(1L)
+//                .phoneNumber("12")
 //                .status(UserStatus.ACTIVE)
-//                .password("123123")
+//                .password(passwordEncoder.encode("123"))
 //                .email("altun@email.com").build();
-  //      user.setId(1L);
+//        user.setId(1L);
 //        try{
 //            service.insert(user);
 //            System.out.println("ugurla inserted");
 //        }catch (Exception e){
 //            System.out.println("bu xeta: " + e.getMessage());
 //        }
-//        try {
-//            User retrievedUser = service.getEmail("altun@gmail.com");
+//
+//            User retrievedUser = service.getEmail("altun@email.com");
 //            System.out.println("Retrieved user: " + retrievedUser.getName());
 //        } catch (Exception e) {
 //            System.err.println("Failed to retrieve user: " + e.getMessage());
 //        }
-//        System.out.println(service.getEmail("altun@gmail.com"));
+
+        // System.out.println(service.getEmail("altun@email.com"));
 
         //      System.out.println(securityProperties);
 //        KeyPairGenerator keyGenerator = KeyPairGenerator.getInstance("RSA");

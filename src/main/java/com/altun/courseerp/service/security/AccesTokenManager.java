@@ -4,6 +4,7 @@ import com.altun.courseerp.models.mybatis.user.User;
 import com.altun.courseerp.models.properties.security.SecurityProperties;
 import com.altun.courseerp.service.base.TokenGenerator;
 import com.altun.courseerp.service.base.TokenReader;
+import com.altun.courseerp.service.getters.EmailGetter;
 import com.altun.courseerp.utils.PublicPrivateKeyUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,10 +15,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+import static com.altun.courseerp.constrants.TokenConstrants.EMAIL;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class AccesTokenManager implements TokenGenerator<User>, TokenReader<Claims> {
+public class AccesTokenManager implements TokenGenerator<User>, TokenReader<Claims>, EmailGetter {
 
 
     private final SecurityProperties securityProperties;
@@ -26,7 +29,7 @@ public class AccesTokenManager implements TokenGenerator<User>, TokenReader<Clai
     @Override
     public String generate(User obj) {
         Claims claims = Jwts.claims();
-        claims.put("email",obj.getEmail());
+        claims.put(EMAIL,obj.getEmail());
 
         Date now = new Date();
         Date exp = new Date(now.getTime()+securityProperties.getJwt().getAccessTokenValidityTime());
@@ -52,5 +55,10 @@ public class AccesTokenManager implements TokenGenerator<User>, TokenReader<Clai
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    @Override
+    public String getEmail(String token) {
+        return read(token).get(EMAIL, String.class);
     }
 }

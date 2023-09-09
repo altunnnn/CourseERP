@@ -5,7 +5,10 @@ import com.altun.courseerp.models.dto.RefreshTokenDto;
 import com.altun.courseerp.models.mybatis.user.User;
 import com.altun.courseerp.models.response.auth.LoginResponse;
 import com.altun.courseerp.payload.auth.LoginPayload;
+import com.altun.courseerp.payload.auth.RefreshPayload;
 import com.altun.courseerp.service.security.AccesTokenManager;
+import com.altun.courseerp.service.security.AuthBusinessService;
+import com.altun.courseerp.service.security.AuthBusinessServiceImp;
 import com.altun.courseerp.service.security.RefreshTokenManager;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,37 +29,28 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
 
-    private final AccesTokenManager accesTokenManager;
-    private final RefreshTokenManager refreshTokenManager;
+    private final AuthBusinessService authBusinessService;
 
     @PostMapping("/login")
     public BaseResponse<LoginResponse> login(@RequestBody LoginPayload loginPayload){
-        User user = User.builder().email("altun@gmail.com").build();
-        user.setId(1L);
-
-        authenticate(loginPayload);
-
         return BaseResponse.succed(
-                LoginResponse.builder()
-                        .accessToken(accesTokenManager.generate(user))
-                        .refreshToken(refreshTokenManager.generate(RefreshTokenDto.builder()
-                                        .rememberMe(loginPayload.isRememberMe())
-                                        .user(user)
-                                .build()))
-                        .build()
+                authBusinessService.login(loginPayload)
         );
     }
 
+    @PostMapping("/token/refresh")
+    public BaseResponse<LoginResponse> refresh(@RequestBody RefreshPayload refreshPayload){
 
-    private final AuthenticationManager authenticationManager;
-    private void authenticate(LoginPayload request){
-        try{
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword())
-            );
-        }catch (AuthenticationException e){
-            throw new RuntimeException("Exception: " + e);
-        }
+        return BaseResponse.succed(authBusinessService.refresh(refreshPayload));
     }
+
+    @PostMapping("/logout")
+    public BaseResponse<Void> logout(){
+        authBusinessService.logout();
+        return BaseResponse.succed();
+    }
+
+
+
 
 }

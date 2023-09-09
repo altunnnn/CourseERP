@@ -5,6 +5,7 @@ import com.altun.courseerp.models.mybatis.user.User;
 import com.altun.courseerp.models.properties.security.SecurityProperties;
 import com.altun.courseerp.service.base.TokenGenerator;
 import com.altun.courseerp.service.base.TokenReader;
+import com.altun.courseerp.service.getters.EmailGetter;
 import com.altun.courseerp.utils.PublicPrivateKeyUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -15,10 +16,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+import static com.altun.courseerp.constrants.TokenConstrants.EMAIL;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class RefreshTokenManager implements TokenGenerator<RefreshTokenDto>, TokenReader<Claims> {
+public class RefreshTokenManager implements TokenGenerator<RefreshTokenDto>, TokenReader<Claims>, EmailGetter {
 
 
     private final SecurityProperties securityProperties;
@@ -45,10 +48,22 @@ public class RefreshTokenManager implements TokenGenerator<RefreshTokenDto>, Tok
 
     @Override
     public Claims read(String token) {
-        return Jwts.parserBuilder()
+
+
+        Claims tokenData = Jwts.parserBuilder()
                 .setSigningKey(PublicPrivateKeyUtils.getPrivateKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+        String typeOfToken = tokenData.get("type", String.class);
+        if (!typeOfToken.equals("REFRESH_TOKEN")){
+            throw new RuntimeException("Invalid type of token");
+        }
+        return tokenData;
+    }
+
+    @Override
+    public String getEmail(String token) {
+        return read(token).get(EMAIL,String.class);
     }
 }
