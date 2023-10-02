@@ -1,10 +1,14 @@
 package com.altun.courseerp;
 
+import com.altun.courseerp.mappers.CourseEntityMapper;
 import com.altun.courseerp.models.enums.UserStatus;
+import com.altun.courseerp.models.mybatis.course.Course;
 import com.altun.courseerp.models.mybatis.user.User;
 import com.altun.courseerp.models.mybatis.user.UserServiceImpl;
 import com.altun.courseerp.models.properties.security.SecurityProperties;
+import com.altun.courseerp.payload.auth.SignUpPayload;
 import com.altun.courseerp.repository.UserRepository;
+import com.altun.courseerp.service.course.CourseService;
 import com.altun.courseerp.service.security.AccesTokenManager;
 import lombok.RequiredArgsConstructor;
 import org.mybatis.spring.annotation.MapperScan;
@@ -32,9 +36,22 @@ public class CourseErpApplication implements CommandLineRunner {
     private final AccesTokenManager accesTokenManager;
     private final UserServiceImpl service;
     private final PasswordEncoder passwordEncoder;
+    private final CourseService courseService;
 
     @Override
     public void run(String... args) throws Exception {
+
+
+
+        //                                 ****Testing Course inserting****
+//        SignUpPayload signUpPayload = new SignUpPayload();
+//        signUpPayload.setName("789");
+//        signUpPayload.setCourseName("456");
+//
+//        System.out.println(CourseEntityMapper.INSTANCE.fromSignUpPayload(signUpPayload));
+
+
+        //                                    ****Testing User****
 //        User user = User.builder()
 //                .name("Test")
 //                .surname("test")

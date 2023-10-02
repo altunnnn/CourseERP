@@ -1,11 +1,13 @@
 package com.altun.courseerp.controller;
 
+import com.altun.courseerp.mappers.UserEntityMapper;
 import com.altun.courseerp.models.BaseResponse;
 import com.altun.courseerp.models.dto.RefreshTokenDto;
 import com.altun.courseerp.models.mybatis.user.User;
 import com.altun.courseerp.models.response.auth.LoginResponse;
 import com.altun.courseerp.payload.auth.LoginPayload;
 import com.altun.courseerp.payload.auth.RefreshPayload;
+import com.altun.courseerp.payload.auth.SignUpPayload;
 import com.altun.courseerp.service.security.AccesTokenManager;
 import com.altun.courseerp.service.security.AuthBusinessService;
 import com.altun.courseerp.service.security.AuthBusinessServiceImp;
@@ -51,6 +53,9 @@ public class AuthController {
     }
 
 
-
+    public BaseResponse<Void> signUp(@RequestBody SignUpPayload signUpPayload){
+        System.out.println(UserEntityMapper.INSTANCE.fromSignUpPayloadToUser(signUpPayload,"123",1L));
+        return null;
+    }
 
 }
