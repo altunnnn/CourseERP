@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User extends BaseEntity {
+public class User extends BaseEntity<Number> {
 
     String name;
     String surname;
@@ -20,5 +20,9 @@ public class User extends BaseEntity {
     String phoneNumber;
     String email;
     String password;
+
+    public boolean isActive(){
+        return UserStatus.ACTIVE.equals(status);
+    }
 
 }

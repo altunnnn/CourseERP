@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BaseEntity extends IsDeletedEntity{
+public class BaseEntity<L extends Number> extends IsDeletedEntity{
 
     Long id;
 

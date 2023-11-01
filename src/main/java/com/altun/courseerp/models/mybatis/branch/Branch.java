@@ -12,13 +12,10 @@ import lombok.experimental.FieldDefaults;
 @EqualsAndHashCode(callSuper = false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Branch {
-
     String name;
     String address;
     BranchStatus status;
     Double lat;
     Double lon;
     Long courseId;
-
-
 }

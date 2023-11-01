@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Course extends BaseEntity {
+public class Course extends BaseEntity<Number> {
 
     String name;
     CourseStatus status;

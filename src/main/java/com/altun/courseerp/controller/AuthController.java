@@ -52,10 +52,11 @@ public class AuthController {
         return BaseResponse.succed();
     }
 
-
+    @PostMapping("/sign-up")
     public BaseResponse<Void> signUp(@RequestBody SignUpPayload signUpPayload){
-        System.out.println(UserEntityMapper.INSTANCE.fromSignUpPayloadToUser(signUpPayload,"123",1L));
-        return null;
+  //      System.out.println(UserEntityMapper.INSTANCE.fromSignUpPayloadToUser(signUpPayload,"123",1L));
+        authBusinessService.signup(signUpPayload);
+        return BaseResponse.succed();
     }
 
 }

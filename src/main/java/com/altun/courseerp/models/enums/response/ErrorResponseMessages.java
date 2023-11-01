@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 public  enum  ErrorResponseMessages implements ResponseMessage {
     UNEXPECTED("unexpected", "Unexpected error", HttpStatus.INTERNAL_SERVER_ERROR),
     NOT_FOUND("not_found_%s","%s_cant_find_%s",HttpStatus.NOT_FOUND),
-    EMAIL_ALREADY_REGISTERED("email_already_registered","Email already registered",HttpStatus.CONFLICT)
+    EMAIL_ALREADY_REGISTERED("email_already_registered","Email already registered",HttpStatus.CONFLICT),
+    USER_IS_NOT_ACTIVE("user_not_active","User is not active",HttpStatus.FORBIDDEN),
+    FORBIDDEN("forbidden","Forbidden", HttpStatus.FORBIDDEN)
     ;
 
 

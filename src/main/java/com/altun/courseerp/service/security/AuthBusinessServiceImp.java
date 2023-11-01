@@ -5,6 +5,8 @@ import com.altun.courseerp.mappers.CourseEntityMapper;
 import com.altun.courseerp.mappers.UserEntityMapper;
 import com.altun.courseerp.models.BaseResponse;
 import com.altun.courseerp.models.dto.RefreshTokenDto;
+import com.altun.courseerp.models.enums.branch.BranchStatus;
+import com.altun.courseerp.models.mybatis.branch.Branch;
 import com.altun.courseerp.models.mybatis.course.Course;
 import com.altun.courseerp.models.mybatis.role.Role;
 import com.altun.courseerp.models.mybatis.user.User;
@@ -13,6 +15,7 @@ import com.altun.courseerp.models.response.auth.LoginResponse;
 import com.altun.courseerp.payload.auth.LoginPayload;
 import com.altun.courseerp.payload.auth.RefreshPayload;
 import com.altun.courseerp.payload.auth.SignUpPayload;
+import com.altun.courseerp.service.branch.BranchService;
 import com.altun.courseerp.service.course.CourseService;
 import com.altun.courseerp.service.role.RoleService;
 import io.jsonwebtoken.Claims;
@@ -34,6 +37,7 @@ import static com.altun.courseerp.models.enums.response.ErrorResponseMessages.EM
 @RequiredArgsConstructor
 @Slf4j
 public class AuthBusinessServiceImp implements AuthBusinessService{
+    private final static String BRANCH_NAME_DEFAULT_PATTERN = "%s default branch";
     private final AccesTokenManager accesTokenManager;
     private final RefreshTokenManager refreshTokenManager;
     private final AuthenticationManager authenticationManager;
@@ -42,6 +46,7 @@ public class AuthBusinessServiceImp implements AuthBusinessService{
     private final RoleService roleService;
     private final BCryptPasswordEncoder passwordEncoder;
     private final CourseService courseService;
+    private final BranchService branchService;
 
     @Override
     public LoginResponse login(LoginPayload loginPayload) {
@@ -88,8 +93,13 @@ public class AuthBusinessServiceImp implements AuthBusinessService{
         );
         userService.insert(user);
 
+
+
         Course course = CourseEntityMapper.INSTANCE.fromSignUpPayload(signUpPayload);
         courseService.insert(course);
+
+        Branch branch = populateBranchData(signUpPayload);
+        branchService.insert(branch);
     }
 
     private void authenticate(LoginPayload request){
@@ -98,8 +108,19 @@ public class AuthBusinessServiceImp implements AuthBusinessService{
                     new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword())
             );
         }catch (AuthenticationException e){
-            throw new RuntimeException("Exception: " + e);
+            if (e.getCause() instanceof BaseException){
+                throw (BaseException) e.getCause();
+            }else {
+                throw BaseException.unexpected();
+            }
         }
+    }
+
+    private Branch populateBranchData(SignUpPayload signUpPayload){
+        return Branch.builder()
+                .name(BRANCH_NAME_DEFAULT_PATTERN.formatted(signUpPayload.getName()))
+                .status(BranchStatus.ACTIVE)
+                .build();
     }
 
     private LoginResponse prepareLoginResponse(String email, boolean rememberMe) {

@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Role extends BaseEntity {
+public class Role extends BaseEntity<Number> {
     String name;
     String description;
 }
