@@ -8,6 +8,7 @@ import com.altun.courseerp.models.response.auth.LoginResponse;
 import com.altun.courseerp.payload.auth.LoginPayload;
 import com.altun.courseerp.payload.auth.RefreshPayload;
 import com.altun.courseerp.payload.auth.SignUpPayload;
+import com.altun.courseerp.payload.auth.otp.BaseOTPChannelRequest;
 import com.altun.courseerp.service.security.AccesTokenManager;
 import com.altun.courseerp.service.security.AuthBusinessService;
 import com.altun.courseerp.service.security.AuthBusinessServiceImp;
@@ -56,6 +57,18 @@ public class AuthController {
     public BaseResponse<Void> signUp(@RequestBody SignUpPayload signUpPayload){
   //      System.out.println(UserEntityMapper.INSTANCE.fromSignUpPayloadToUser(signUpPayload,"123",1L));
         authBusinessService.signup(signUpPayload);
+        return BaseResponse.succed();
+    }
+
+    @PostMapping("/sign-up/otp/request")
+    public BaseResponse<Void> otpRequest(@RequestBody BaseOTPChannelRequest baseOTPChannelRequest){
+        authBusinessService.signupOtp(baseOTPChannelRequest);
+        return BaseResponse.succed();
+    }
+
+    @PostMapping("/sign-up/otp/confirmation")
+    public BaseResponse<Void> otpConfirmation(){
+
         return BaseResponse.succed();
     }
 

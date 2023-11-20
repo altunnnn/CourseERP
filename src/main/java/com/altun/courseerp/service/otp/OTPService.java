@@ -1,5 +1,5 @@
 package com.altun.courseerp.service.otp;
 
-public interface OtpService {
+public interface OTPService {
     void send();
 }

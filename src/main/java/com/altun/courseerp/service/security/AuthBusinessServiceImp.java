@@ -15,8 +15,10 @@ import com.altun.courseerp.models.response.auth.LoginResponse;
 import com.altun.courseerp.payload.auth.LoginPayload;
 import com.altun.courseerp.payload.auth.RefreshPayload;
 import com.altun.courseerp.payload.auth.SignUpPayload;
+import com.altun.courseerp.payload.auth.otp.BaseOTPChannelRequest;
 import com.altun.courseerp.service.branch.BranchService;
 import com.altun.courseerp.service.course.CourseService;
+import com.altun.courseerp.service.otp.OTPFactory;
 import com.altun.courseerp.service.role.RoleService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +41,7 @@ import static com.altun.courseerp.models.enums.response.ErrorResponseMessages.EM
 public class AuthBusinessServiceImp implements AuthBusinessService{
     private final static String BRANCH_NAME_DEFAULT_PATTERN = "%s default branch";
     private final AccesTokenManager accesTokenManager;
+    private final OTPFactory otpFactory;
     private final RefreshTokenManager refreshTokenManager;
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
@@ -100,6 +103,16 @@ public class AuthBusinessServiceImp implements AuthBusinessService{
 
         Branch branch = populateBranchData(signUpPayload);
         branchService.insert(branch);
+    }
+
+    @Override
+    public void signupOtp(BaseOTPChannelRequest baseOTPChannelRequest) {
+        otpFactory.handle(baseOTPChannelRequest.getChannel());
+    }
+
+    @Override
+    public void signupOTPconfirmation() {
+        log.info("Payload confirmed");
     }
 
     private void authenticate(LoginPayload request){
